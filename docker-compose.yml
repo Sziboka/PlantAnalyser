@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: plant_analyser_webserver
+    ports:
+      - "9090:9090"
+    networks:
+      - plantnet
+
+networks:
+  plantnet:
+    driver: bridge

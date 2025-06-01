@@ -10,6 +10,44 @@ services:
       - "9090:9090"
     networks:
       - plantnet
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: plant_analyser_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - plantnet
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express:1.0.0-alpha.4
+    container_name: plant_analyser_mongo_express
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - plantnet
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: plant_analyser_grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - plantnet
+    environment:
+      - GF_INSTALL_PLUGINS=frser-sqlite-datasource,yesoreyeram-infinity-datasource,grafana-mongodb-datasource
 
 networks:
   plantnet:
